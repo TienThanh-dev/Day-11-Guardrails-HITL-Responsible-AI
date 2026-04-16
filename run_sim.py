@@ -358,6 +358,8 @@ p3_pipe.rl.reset()
 t3 = []
 for i in range(1, 16):
     r = p3_pipe.process(f'Query {i}', user_id='rate_test', session_id='s_rate')
+    # Small sleep to ensure distinct timestamps (fixes same-time-window issue)
+    time.sleep(0.05)
     t3.append({'i': i, 'blocked': bool(r['blocked_by'])})
     print(f'  Request {i:2d}: {"PASSED" if not r["blocked_by"] else "RATE-LIMITED"}')
 p3 = sum(1 for x in t3 if not x['blocked'])
